@@ -11,4 +11,11 @@ testRouter.get("/test", (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
+testRouter.delete("/delete", (req: Request, res: Response, next: NextFunction) => {
+  console.log("delete");
+  client.query("DELETE * FROM emp", (e, r) => {
+    res.json(r);
+  });
+});
+
 export { testRouter };
