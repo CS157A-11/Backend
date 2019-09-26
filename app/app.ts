@@ -4,13 +4,14 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+require("dotenv").config();
 
 export const client = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "password",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   port: 3306,
-  database: "cs157a"
+  database: process.env.DB_NAME
 });
 
 client.connect(err => {
