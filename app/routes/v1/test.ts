@@ -4,7 +4,7 @@ import express from "express";
 
 const testRouter = express.Router();
 
-testRouter.get("/test", (req: Request, res: Response, next: NextFunction) => {
+testRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   console.log("get");
   client.query("SELECT * FROM emp", (e, r) => {
     res.json(r);
