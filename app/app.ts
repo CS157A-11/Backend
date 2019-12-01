@@ -5,6 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 require("dotenv").config();
 
@@ -27,8 +28,8 @@ client.connect(err => {
 const app = express();
 app.use(cors());
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1/", router);
