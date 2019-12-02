@@ -1,3 +1,5 @@
+import jsonwebtoken from "jsonwebtoken";
+
 export function verifyToken(req, res, next) {
   // Check header or url parameters or post parameters for token
   const token = req.headers["x-access-token"];
