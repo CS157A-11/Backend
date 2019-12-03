@@ -180,5 +180,6 @@ VALUES
     (2, 'alex.karev', '2019-10-01'); 
 
 	
-  
+DELETE FROM Moods_of_the_day WHERE Moods_of_the_day.date LIKE '2019-10-13' AND Moods_of_the_day.mood_name LIKE 'sad';
+DELETE FROM Moods_of_the_day WHERE Moods_of_the_day.date LIKE '2019-10-10' AND Moods_of_the_day.mood_name LIKE 'sad';
     
