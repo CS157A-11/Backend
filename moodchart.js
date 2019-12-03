@@ -5,7 +5,7 @@ var testRouter = express();
 //graph arrays 
 //var date = ''; 
 //var mood = ''; 
-var dateMood = []; 
+var moodNum = []; 
 
 //create connection to db
 var connection = mysql.createConnection({
@@ -16,7 +16,7 @@ var connection = mysql.createConnection({
 });
 
 //sql query
-var query2 = 'SELECT date, mood_name FROM Moods_of_the_Day'; 
+var query2 = 'SELECT DISTINCT mood_name, COUNT(mood_name) as num FROM Moods_of_the_Day GROUP BY mood_name ORDER BY num DESC;'; 
 
  
 connection.connect(function(err) {
@@ -31,10 +31,10 @@ connection.connect(function(err) {
 function format2(resultArr) {
   for(var i = 0; i < resultArr.length; i++)
   {
-    d = resultArr[i].date.toString(); 
     mood = resultArr[i].mood_name.toString(); 
-    dateMood[i] = d + ': ' + mood; 
+    num = resultArr[i].num;
+    moodNum[i] = mood + ': ' + num; 
   }
-  console.log(dateMood.join('\r\n'));
+  console.log(moodNum.join('\r\n'));
 }; 
 
