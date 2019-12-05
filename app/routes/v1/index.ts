@@ -7,6 +7,7 @@ import { habitRouter } from "./habit";
 import { moodOfTheDayRouter } from "./moodOfTheDay";
 import { completeTodoRouter } from "./completeTodo";
 import { completeHabitRouter } from "./completeHabit";
+import { reportRouter } from "./report";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use("/habits", habitRouter);
 router.use("/moodoftheday", moodOfTheDayRouter);
 router.use("/completetodos", completeTodoRouter);
 router.use("/completehabits", completeHabitRouter);
+router.use("/reports", reportRouter);
 router.use("/users", userRouter);
 
 export { router };
