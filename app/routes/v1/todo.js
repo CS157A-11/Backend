@@ -50,11 +50,11 @@ todoRouter.get("/:todo_id", (req, res, next) => {
 });
 
 // UPDATE for isActive
-todoRouter.put("/:todo_id", (req, res, next) => {
+todoRouter.put("/updateIsActive", (req, res, next) => {
   console.log("PUT");
   client.query(
     "UPDATE todos SET is_active=? where id=?",
-    [req.params.isActive, req.params.todo_id],
+    [req.body.is_active, req.body.todo_id],
     function(err, results) {
       if (err) throw err;
       res.json(results);

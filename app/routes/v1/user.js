@@ -3,13 +3,14 @@ import express from "express";
 import { ApiError } from "../../utils/APIerror";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
+import { verifyToken } from "../../utils/auth";
 
 const userRouter = express.Router();
 
-userRouter.get("/userinfo", (req, res, next) => {
+userRouter.get("/userinfo", verifyToken, (req, res, next) => {
   client.query(
     "SELECT * FROM users WHERE users.email = ?",
-    [req.body.email],
+    [req.email],
     (e, r) => res.json(r)
   );
 });
@@ -32,7 +33,10 @@ userRouter.post("/login", (req, res) => {
                 expiresIn: 3600
               }
             );
-            res.send({ token });
+            return res.send({
+              token,
+              user: { name: user.name, email: user.email }
+            });
           }
         }
         return res.status(401).json({ msg: "error" });
@@ -44,7 +48,6 @@ userRouter.post("/login", (req, res) => {
 });
 
 userRouter.post("/signup", (req, res, next) => {
-  console.log("sigunup");
   const { email, password, name } = req.body;
   try {
     const salt = bcrypt.genSaltSync(10);
@@ -63,7 +66,10 @@ userRouter.post("/signup", (req, res, next) => {
           expiresIn: 3600
         }
       );
-      res.send({ token, newUser });
+      return res.send({
+        token,
+        user: { name: newUser.name, email: newUser.email }
+      });
     });
   } catch (err) {
     return res.status(500).json({ msg: "Internal server error" });
