@@ -8,7 +8,7 @@ moodOfTheDayRouter.use(verifyToken);
 
 moodOfTheDayRouter.post("/", (req, res, next) => {
   console.log("POST");
-  const postData = { ...req.body, date: new Date() };
+  const postData = { ...req.body, date: new Date(req.body.date) };
   client.query(
     "INSERT INTO moods_of_the_day SET ?",
     postData,
@@ -40,17 +40,12 @@ moodOfTheDayRouter.get("/", (req, res, next) => {
   );
 });
 
-// READ (single todo)
-moodOfTheDayRouter.get("/:mood_id", (req, res, next) => {
+moodOfTheDayRouter.get("/availablemoods", (req, res, next) => {
   console.log("GET");
-  client.query(
-    "SELECT FROM moods_of_the_day where id=?",
-    [req.params.mood_id],
-    (err, results) => {
-      if (err) throw err;
-      res.json(results);
-    }
-  );
+  client.query("SELECT * FROM moods", (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
 });
 
 // UPDATE for isActive

@@ -15,7 +15,7 @@ completeTodoRouter.post("/", (req, res, next) => {
       if (err) throw err;
       const postData = {
         ...req.body,
-        completed_date: new Date(),
+        completed_date: new Date(req.body.completed_date),
         email: req.email
       };
       client.query(

@@ -50,11 +50,11 @@ habitRouter.get("/:habit_id", (req, res, next) => {
 });
 
 // UPDATE for isActive
-habitRouter.put("/:habit_id", (req, res, next) => {
+habitRouter.put("/updateIsActive", (req, res, next) => {
   console.log("PUT");
   client.query(
     "UPDATE habits SET is_active=? where id=?",
-    [req.params.isActive, req.params.habit_id],
+    [req.body.is_active, req.body.habit_id],
     function(err, results) {
       if (err) throw err;
       res.json(results);

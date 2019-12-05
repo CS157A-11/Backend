@@ -7,7 +7,6 @@ const completeHabitRouter = express.Router();
 completeHabitRouter.use(verifyToken);
 
 completeHabitRouter.post("/", (req, res, next) => {
-  console.log("POST");
   client.query(
     "SELECT * FROM habits where id=?",
     [req.body.habit_id],
@@ -15,7 +14,7 @@ completeHabitRouter.post("/", (req, res, next) => {
       if (err) throw err;
       const postData = {
         ...req.body,
-        completed_date: new Date(),
+        completed_date: new Date(req.body.completed_date),
         email: req.email
       };
       client.query(
