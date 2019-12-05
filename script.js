@@ -1,11 +1,11 @@
-$(document).ready(function() {
   var mysql = require('mysql2');
   var express = require('express');
   var testRouter = express();
 
   //graph arrays
+  var mood = [];
+  var num = [];
   var moodNum = [];
-
   //create connection to db
   var connection = mysql.createConnection({
     host: 'localhost',
@@ -17,11 +17,13 @@ $(document).ready(function() {
   //sql query
   var query2 = 'SELECT DISTINCT mood_name, COUNT(mood_name) as num FROM Moods_of_the_Day GROUP BY mood_name ORDER BY num DESC;';
 
-  connection.connect(function(err) {
+  //get data from db
+  testRouter.get('/data', function(req, res) {
     if (err) throw err;
     connection.query(query2, function(err, resultArr, fields) {
       if (err) throw err;
       format2(resultArr);
+      res.send(moodNum);
     });
   });
 
@@ -29,30 +31,33 @@ $(document).ready(function() {
   function format2(resultArr) {
     for(var i = 0; i < resultArr.length; i++)
     {
-      mood = resultArr[i].mood_name.toString();
-      num = resultArr[i].num;
-      moodNum[i] = mood + ': ' + num;
+      mood[i] = resultArr[i].mood_name.toString();
+      num[i] = resultArr[i].num;
+      //moodNum[i] = mood + ': ' + num;
     }
+    moodNum = [mood, num];
     console.log(moodNum.join('\r\n'));
   };
 
-  var charData = {
-    labels: Moods,
-    datasets : [
-      {
-        label: 'Moods',
-        backgroundColor: 'rgba(400, 400, 400, 0.80)',
-        borderColor: 'rgba(400, 400, 400, 0.80)',
-        hoverBackgroundColor: 'rgba(400, 400, 400, 1)',
-        data: num
+  var ctx = document.getElementById("mycanvas").getContext('2d');
+  var mychart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: mood,
+        datasets : [
+          {
+            label: "Moods",
+            backgroundColor: ["red", "lightgreen","skyblue","orange","purple", "black", "yellow"],
+            borderColor: 'rgba(400, 400, 400, 0.80)',
+            //hoverBackgroundColor: 'rgba(400, 400, 400, 1)',
+            data: num
+          }
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Your Moods Over This Month'
+        }
       }
-    ]
-  };
-
-  var ctx = $("#mycanvas");
-  var donut = new Chart(ctx, {
-      type: "doughnut",
-      data: charData
   });
-
-});
