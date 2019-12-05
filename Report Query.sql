@@ -29,3 +29,13 @@ SELECT DISTINCT mood_name, COUNT(mood_name) as num
 FROM Moods_of_the_Day
 GROUP BY mood_name
 ORDER BY num DESC;
+
+SELECT GROUP_CONCAT(Moods_of_the_day.date) AS date, COUNT(DISTINCT Habits.name) AS IncompleteHabits, Moods_of_the_day.mood_name AS NegativeMoods
+FROM Habits, Moods, Users_completes_habits, Moods_of_the_day 
+WHERE date IN (SELECT Moods_of_the_day.date
+				FROM Moods_of_the_day INNER JOIN Moods ON Moods_of_the_day.mood_name = Moods.name 
+				WHERE Moods.weight < 1)
+		AND Habits.habit_id NOT IN (SELECT habit_id FROM Users_completes_habits) 
+        AND Users_completes_habits.user_name LIKE 'clarke.w'
+GROUP BY NegativeMoods
+ORDER BY date;
